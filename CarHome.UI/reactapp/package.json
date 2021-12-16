@@ -1,0 +1,23 @@
+{
+  "name": "my-app",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "parcel src/index.html --open",
+    "dev": "react-scripts start",
+    "build": "parcel build src/index.html --no-optimize"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-router-dom": "^5.2.1",
+    "react-scripts": "5.0.0"
+  },
+  "devDependencies": {
+    "@parcel/config-default": "^2.0.1",
+    "@parcel/transformer-raw": "^2.0.1",
+    "parcel": "^2.0.1"
+  }
+}
