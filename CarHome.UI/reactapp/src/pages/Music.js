@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import Button from '../Components/Button';
-import Container from '../Components/Container';
+import Button from '../components/Button';
+import Container from '../components/Container';
 
 function Music(props) {
     let navigate = useNavigate();
@@ -44,6 +44,16 @@ function Music(props) {
         });
     }
 
+    const listDrives = (event) => {
+        axios.get('http://backend/drives/list')
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
     return (
         <>
             <h2 className='header'>Home</h2>
@@ -59,6 +69,7 @@ function Music(props) {
             <Container>
                 <>
                     <div className='row'>
+                        <Button text='List Drives' onEnterPress={listDrives} />
                         <Button text='Open File' onEnterPress={loadMusic} />
                         <Button text='Play' onEnterPress={playMusic} />
                         <Button text='Pause' onEnterPress={pauseMusic} />

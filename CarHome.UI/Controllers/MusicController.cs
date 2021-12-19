@@ -41,6 +41,7 @@ namespace ChromelyReact.Controllers
             RegisterRequest("/music/load", LoadMusic);
             RegisterRequest("/music/pause", PauseMusic);
             RegisterRequest("/music/play", PlayMusic);
+            RegisterRequest("drives/list", GetDrives);
 
             _player.MediaEnded += (s, e) =>
             {
@@ -141,6 +142,26 @@ namespace ChromelyReact.Controllers
             options.ReadCommentHandling = JsonCommentHandling.Skip;
             options.AllowTrailingCommas = true;
             response.Data = _serializerUtil.ObjectToJson(_player);
+
+            return response;
+        }
+
+        private IChromelyResponse GetDrives(IChromelyRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var response = new ChromelyResponse(request.Id);
+
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            var removableDrives = allDrives.Where(e => e.DriveType == DriveType.Removable);
+
+            var options = new JsonSerializerOptions();
+            options.ReadCommentHandling = JsonCommentHandling.Skip;
+            options.AllowTrailingCommas = true;
+            response.Data = _serializerUtil.ObjectToJson(removableDrives);
 
             return response;
         }
