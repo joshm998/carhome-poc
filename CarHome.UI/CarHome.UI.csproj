@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
     <!-- <RuntimeIdentifier>linux-x64</RuntimeIdentifier>-->
     <!-- <RuntimeIdentifier>osx-x64</RuntimeIdentifier>-->
     <Platforms>x64</Platforms>
@@ -70,7 +70,7 @@
     </Exec>
 
     <Message Importance="High" Text="Copying React App to debug folder.." />
-    <Exec Command="xcopy &quot;$(ProjectDir)reactapp\build&quot; &quot;$(TargetDir)dist&quot;   /i /s /r /y /c" />
+    <Exec Command="cp &quot;$(ProjectDir)reactapp\build&quot; &quot;$(TargetDir)dist&quot; -r" />
   </Target>
 
   <Target Name="ReleaseChromelyApp" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Release' ">

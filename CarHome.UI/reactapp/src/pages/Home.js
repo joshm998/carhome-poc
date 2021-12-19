@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import Button from '../components/Button';
 import Container from '../components/Container';
-import { PlayCircle } from 'react-ionicons'
 
 export default function Home() {
     let navigate = useNavigate();
@@ -16,11 +15,11 @@ export default function Home() {
             <div className="home-menu">
                 <Container>
                     <>
-                        <Button text="Android Auto" icon={<PlayCircle/>} />
-                        <Button text="Media" icon={<PlayCircle/>} onEnterPress={() => navigate("/music")} />
-                        <Button text="Bluetooth" icon={<PlayCircle/>} onEnterPress={() => navigate("/settings")} />
-                        <Button text="Car" icon={<PlayCircle/>} onEnterPress={() => navigate("/settings")} />
-                        <Button text="More" icon={<PlayCircle/>} onEnterPress={() => navigate("/settings")} />
+                        <Button text="Android Auto" icon="bi-play-circle-fill" />
+                        <Button text="Media" icon="bi-play-circle-fill" onEnterPress={() => navigate("/music")} />
+                        <Button text="Bluetooth" icon="bi-play-circle-fill" onEnterPress={() => navigate("/settings")} />
+                        <Button text="Car" icon="bi-play-circle-fill" onEnterPress={() => navigate("/settings")} />
+                        <Button text="More" icon="bi-play-circle-fill" onEnterPress={() => navigate("/settings")} />
                     </>
                 </Container>
             </div>
