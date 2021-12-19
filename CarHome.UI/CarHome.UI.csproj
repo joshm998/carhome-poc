@@ -5,7 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">linux-x64</RuntimeIdentifier>
-    <RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'ARM' ">linux-arm</RuntimeIdentifier>
+    <RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm' ">linux-arm</RuntimeIdentifier>
     <RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Windows')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">win-x64</RuntimeIdentifier>
     <Platforms>x64</Platforms>
     <!-- <ApplicationIcon>chromely.ico</ApplicationIcon>-->
