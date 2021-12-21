@@ -6,7 +6,7 @@ using Chromely.Core.Network;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace ChromelyReact
+namespace CarHome.UI
 {
     class Program
     {
@@ -22,13 +22,13 @@ namespace ChromelyReact
             AppBuilder
             .Create()
             .UseConfig<DefaultConfiguration>(config)
-            .UseApp<DemoApp>()
+            .UseApp<UIApp>()
             .Build()
             .Run(args);
         }
     }
 
-    public class DemoApp : ChromelyBasicApp
+    public class UIApp : ChromelyBasicApp
     {
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -62,7 +62,7 @@ namespace ChromelyReact
             services.AddSingleton<JsonSerializerOptions>(options);
             */
 
-            RegisterControllerAssembly(services, typeof(DemoApp).Assembly);
+            RegisterControllerAssembly(services, typeof(UIApp).Assembly);
         }
     }
 }

@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 
-namespace ChromelyReact.Controllers
+namespace CarHome.UI.Controllers
 {
     /// <summary>
-    /// The demo controller.
+    /// Controller for all Music Functions.
     /// </summary>
     [ControllerProperty(Name = "MusicController")]
     public class MusicController : ChromelyController

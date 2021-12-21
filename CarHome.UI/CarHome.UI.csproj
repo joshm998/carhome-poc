@@ -8,6 +8,8 @@
     <RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm' ">linux-arm</RuntimeIdentifier>
     <RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Windows')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">win-x64</RuntimeIdentifier>
     <Platforms>x64</Platforms>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
     <!-- <ApplicationIcon>chromely.ico</ApplicationIcon>-->
     <AssemblyName>carhome_ui</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
