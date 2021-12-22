@@ -19,7 +19,8 @@ namespace CarHome.Services
             DriveInfo[] allDrives = DriveInfo.GetDrives();
             var removableDrives = allDrives.Where(e => e.DriveType == DriveType.Removable);
             return removableDrives
-                .Select( e => new MenuItem() { Command = e.RootDirectory.FullName, CommandType = CommandType.Play, Title = e.Name})
+                .Select( e => new MenuItem() 
+                { Command = e.RootDirectory.FullName, CommandType = CommandType.LoadMusic, Title = e.Name, Api = "Music"})
                 .ToList();
         }
     }

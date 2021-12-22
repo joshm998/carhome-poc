@@ -23,6 +23,7 @@ namespace CarHome.Services.Models
     public class MenuItem
     {
         public string Title { get; set; }
+        public string Api { get; set; }
         public CommandType CommandType { get; set; }
         public string Command { get; set; }
         public string Icon { get; set; }

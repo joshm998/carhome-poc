@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Home from './pages/Home';
 import Settings from './pages/Settings';
-import Music from './pages/Music';
+import Music from './pages/ListView';
 import { initNavigation } from '@noriginmedia/react-spatial-navigation';
 import axios from 'axios';
 
@@ -32,9 +32,17 @@ function App() {
     }
   });
 
-  const handleAction = (command, commandType) => {
-    console.log(command, commandType)
-    axios.get('http://backend/screen/navigate', {params: {path: "media"}})
+  const handleAction = (command, commandType, api) => {
+    setLoading(true);
+    console.log(command, commandType, api)
+    let url = `http://backend/${api}/${commandType}`
+    console.log(api)
+    if (api == "Music") 
+    {
+      console.log("a")
+      url = `http://backend/${api}`
+    }
+    axios.get(url, {params: {command: command, commandType: commandType}})
         .then(response => {
             console.log(response.data);
             setData(response.data);
@@ -50,7 +58,7 @@ function App() {
       case 'HomeScreen':
         return <Home data={data} handleAction={handleAction}/>
       default: 
-        return <Music/>
+        return <Music data={data} handleAction={handleAction}/>
     }
   })
 

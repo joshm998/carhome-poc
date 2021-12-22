@@ -51,8 +51,8 @@ namespace CarHome.UI.Controllers
             }
 
             var response = new ChromelyResponse(request.Id);
-            var commandType = request.Parameters["CommandType"];
-            var command = request.Parameters["Command"];
+            var commandType = request.Parameters["commandType"];
+            var command = request.Parameters["command"];
 
             if (commandType != null)
             {

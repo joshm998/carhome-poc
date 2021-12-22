@@ -37,6 +37,7 @@ namespace CarHome.UI.Controllers
             _screenService = screenService;
             RegisterRequest("screen/get", GetScreen);
             RegisterRequest("screen/navigate", Navigate);
+            RegisterRequest("screen/launchapp", LaunchApp);
 
         }
 
@@ -53,14 +54,11 @@ namespace CarHome.UI.Controllers
             }
 
             var response = new ChromelyResponse(request.Id);
-            var path = request.Parameters["path"];
+            var path = request.Parameters["command"];
 
             if (path != null)
             {
                 var screen = _screenService.Navigate(path);
-                var options = new JsonSerializerOptions();
-                options.ReadCommentHandling = JsonCommentHandling.Skip;
-                options.AllowTrailingCommas = true;
                 response.Data = _serializerUtil.ObjectToJson(screen);
                 response.Status = 200;
 
@@ -82,13 +80,43 @@ namespace CarHome.UI.Controllers
 
             var screen = _screenService.GetScreenStatus();
 
-            var options = new JsonSerializerOptions();
-            options.ReadCommentHandling = JsonCommentHandling.Skip;
-            options.AllowTrailingCommas = true;
+            response.Status = 200;
             response.Data = _serializerUtil.ObjectToJson(screen);
 
             return response;
         }
+
+        private IChromelyResponse LaunchApp(IChromelyRequest request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (request.Parameters == null)
+            {
+                throw new Exception("Parameters are null or invalid.");
+            }
+
+            var response = new ChromelyResponse(request.Id);
+            var command = request.Parameters["command"];
+
+            if (command != null)
+            {
+                var app = System.Diagnostics.Process.Start(command);
+                var screen = _screenService.GetScreenStatus();
+
+                response.Data = _serializerUtil.ObjectToJson(screen);
+                response.Status = 200;
+
+                return response;
+            }
+
+            response.Status = 400;
+            return response;
+        }
+
+
 
     }
 }

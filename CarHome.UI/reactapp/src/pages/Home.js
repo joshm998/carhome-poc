@@ -14,8 +14,8 @@ export default function Home(props) {
                         {data.menuItems.map((item, i) => (
                             <Button text={item.title} 
                                     icon={item.icon} 
-                                    onEnterPress={() => props.handleAction(item.command, item.commandType)} 
-                                    onClick={() => props.handleAction(item.command, item.commandType)} 
+                                    onEnterPress={() => props.handleAction(item.command, item.commandType, item.api)} 
+                                    onClick={() => props.handleAction(item.command, item.commandType, item.api)} 
 
                             />
                         ))}
