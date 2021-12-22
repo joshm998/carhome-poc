@@ -33,7 +33,7 @@
     {
       "Title": "Back",
       "CommandType": "Navigate",
-      "Api": "music",
+      "Api": "screen",
       "Command": "home",
       "Icon": "circle-play"
     }

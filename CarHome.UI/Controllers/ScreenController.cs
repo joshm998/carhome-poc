@@ -1,24 +1,13 @@
-﻿// Copyright © 2017-2020 Chromely Projects. All rights reserved.
-// Use of this source code is governed by MIT license that can be found in the LICENSE file.
-
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
-using Chromely;
-using ManagedBass;
+﻿using System;
 using Chromely.Core;
 using Chromely.Core.Configuration;
 using Chromely.Core.Network;
-using System.Threading.Tasks;
-using System.IO;
-using System.Linq;
 using CarHome.Services;
 
 namespace CarHome.UI.Controllers
 {
     /// <summary>
-    /// Controller for all Music Functions.
+    /// Controller for all Screen Functions.
     /// </summary>
     [ControllerProperty(Name = "ScreenController")]
     public class ScreenController : ChromelyController
@@ -115,8 +104,5 @@ namespace CarHome.UI.Controllers
             response.Status = 400;
             return response;
         }
-
-
-
     }
 }

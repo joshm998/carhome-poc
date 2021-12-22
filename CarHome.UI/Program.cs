@@ -26,19 +26,19 @@ namespace CarHome.UI
             AppBuilder
             .Create()
             .UseConfig<DefaultConfiguration>(config)
-            .UseApp<UIApp>()
+            .UseApp<CarHomeApp>()
             .Build()
             .Run(args);
         }
     }
 
-    public class UIApp : ChromelyBasicApp
+    public class CarHomeApp : ChromelyBasicApp
     {
         public override void ConfigureServices(IServiceCollection services)
         {
             base.ConfigureServices(services);
             services.AddLogging(configure => configure.AddConsole());
-            services.AddLogging(configure => configure.AddFile("Logs/serilog-{Date}.txt"));
+            services.AddLogging(configure => configure.AddFile("Logs/log-{Date}.txt"));
             services.AddScoped<IScreenService, ScreenService>();
             /*
             // Optional - adding custom handler
@@ -58,15 +58,17 @@ namespace CarHome.UI
             services.AddSingleton<IChromelyConfiguration>(config);
             */
 
-           var options = new JsonSerializerOptions();
-            options.ReadCommentHandling = JsonCommentHandling.Skip;
-            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.AllowTrailingCommas = true;
+            var options = new JsonSerializerOptions
+            {
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                AllowTrailingCommas = true
+            };
             options.Converters.Add(new JsonStringEnumConverter());
             services.AddSingleton<JsonSerializerOptions>(options);
 
 
-            RegisterControllerAssembly(services, typeof(UIApp).Assembly);
+            RegisterControllerAssembly(services, typeof(CarHomeApp).Assembly);
         }
     }
 }

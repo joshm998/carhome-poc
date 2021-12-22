@@ -10,7 +10,7 @@ namespace CarHome.Services
     public class MusicPlayerService : MediaPlayer
     {
         public bool Shuffle { get; set; }
-        private MediaPlayer _player;
+        private readonly MediaPlayer _player;
         public List<string> MusicList { get; set; }
         private int _currentSong;
         public MusicPlayerService()
@@ -21,18 +21,13 @@ namespace CarHome.Services
             _player.MediaEnded += (s, e) =>
             {
                 _player.Stop();
-                if (_currentSong < MusicList.Count - 1)
-                {
-                    _currentSong += 1;
-                    var loadMusicTask = Task.Run(() =>
-                    {
-                        return _player.LoadAsync(MusicList[_currentSong]);
-                    });
+                if (_currentSong >= MusicList.Count - 1) return;
+                _currentSong += 1;
+                var loadMusicTask = Task.Run(() => _player.LoadAsync(MusicList[_currentSong]));
 
-                    loadMusicTask.Wait();
+                loadMusicTask.Wait();
 
-                    _player.Play();
-                }
+                _player.Play();
             };
         }
 
@@ -56,10 +51,7 @@ namespace CarHome.Services
         public void NextTrack()
         {
             _currentSong += 1;
-            var loadMusicTask = Task.Run(() =>
-            {
-                return _player.LoadAsync(MusicList[_currentSong]);
-            });
+            var loadMusicTask = Task.Run(() => _player.LoadAsync(MusicList[_currentSong]));
 
             loadMusicTask.Wait();
 
@@ -69,10 +61,7 @@ namespace CarHome.Services
         public void PreviousTrack()
         {
             _currentSong -= 1;
-            var loadMusicTask = Task.Run(() =>
-            {
-                return _player.LoadAsync(MusicList[_currentSong]);
-            });
+            var loadMusicTask = Task.Run(() => _player.LoadAsync(MusicList[_currentSong]));
 
             loadMusicTask.Wait();
 

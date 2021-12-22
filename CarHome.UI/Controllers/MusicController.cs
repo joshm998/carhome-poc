@@ -1,18 +1,8 @@
-﻿// Copyright © 2017-2020 Chromely Projects. All rights reserved.
-// Use of this source code is governed by MIT license that can be found in the LICENSE file.
-
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json;
-using Chromely;
-using ManagedBass;
+﻿using System;
 using Chromely.Core;
 using Chromely.Core.Configuration;
 using Chromely.Core.Network;
 using System.Threading.Tasks;
-using System.IO;
-using System.Linq;
 using CarHome.Services;
 
 namespace CarHome.UI.Controllers
@@ -59,10 +49,7 @@ namespace CarHome.UI.Controllers
                 switch(commandType)
                 {
                     case "LoadMusic":
-                        var loadMusicTask = Task.Run(() =>
-                        {
-                            return _screenService.MusicPlayer.LoadMusic(command);
-                        });
+                        var loadMusicTask = Task.Run(() => _screenService.MusicPlayer.LoadMusic(command));
                         loadMusicTask.Wait();
                         goto default;
 
@@ -83,9 +70,6 @@ namespace CarHome.UI.Controllers
                         goto default;
 
                     default:
-                        var options = new JsonSerializerOptions();
-                        options.ReadCommentHandling = JsonCommentHandling.Skip;
-                        options.AllowTrailingCommas = true;
                         response.Data = _serializerUtil.ObjectToJson(_screenService.GetScreenStatus());
                         response.Status = 200;
                         return response;

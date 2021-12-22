@@ -12,7 +12,7 @@ namespace CarHome.Services
     public class ScreenService: IScreenService
     {
         private string _currentPath;
-        private FileBrowserService _fileBrowserService;
+        private readonly FileBrowserService _fileBrowserService;
         public MusicPlayerService MusicPlayer { get; set; }
         public ScreenService()
         {
@@ -32,10 +32,10 @@ namespace CarHome.Services
                         goto default;
 
                 default:
-                    using (StreamReader r = new StreamReader($"data/{_currentPath}.json"))
+                    using (var r = new StreamReader($"data/{_currentPath}.json"))
                     {
-                        string json = r.ReadToEnd();
-                        ScreenModel model = JsonConvert.DeserializeObject<ScreenModel>(json);
+                        var json = r.ReadToEnd();
+                        var model = JsonConvert.DeserializeObject<ScreenModel>(json);
                         return model;
                     }
 

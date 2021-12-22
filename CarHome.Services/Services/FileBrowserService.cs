@@ -16,7 +16,7 @@ namespace CarHome.Services
 
         public List<MenuItem> GetDrives()
         {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            var allDrives = DriveInfo.GetDrives();
             var removableDrives = allDrives.Where(e => e.DriveType == DriveType.Removable);
             return removableDrives
                 .Select( e => new MenuItem() 
