@@ -5,7 +5,6 @@ import Button from '../components/Button';
 import Container from '../components/Container';
 
 function Music(props) {
-    let navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
@@ -54,6 +53,16 @@ function Music(props) {
         });
     }
 
+    const getScreen = (event) => {
+        axios.get('http://backend/screen')
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
     return (
         <>
             <h2 className='header'>Home</h2>
@@ -69,32 +78,15 @@ function Music(props) {
             <Container>
                 <>
                     <div className='row'>
-                        <Button text='List Drives' onEnterPress={listDrives} />
+                        <Button text='List Drives' onEnterPress={getScreen} />
                         <Button text='Open File' onEnterPress={loadMusic} />
                         <Button text='Play' onEnterPress={playMusic} />
                         <Button text='Pause' onEnterPress={pauseMusic} />
-                        <Button text='Back' onEnterPress={() => navigate('/')} />
+                        <Button text='Back' onEnterPress={() => alert('/')} />
                     </div>
                 </>
             </Container>
         </>
-
-        // <div className="container-fluid">
-        //     <div className="row">
-        //         <h1 onClick={loadMusic}>Open File</h1>
-        //         <h2 onClick={playMusic}>Play</h2>
-        //         <h2 onClick={pauseMusic}>Pause</h2>
-        //         {!loading && (
-        //             <div>
-        //                 {data.Title}
-        //                 {data.State}
-        //                 {data.Volume}
-        //                 {data.Duration}
-        //                 {data.Position}
-        //             </div>
-        //         )}
-        //     </div>
-        // </div>
     );
 }
 export default Music;

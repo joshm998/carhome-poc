@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using CarHome.Services;
 using Chromely;
 using Chromely.Core;
 using Chromely.Core.Configuration;
@@ -14,7 +17,8 @@ namespace CarHome.UI
         static void Main(string[] args)
         {
             var config = DefaultConfiguration.CreateForRuntimePlatform();
-            config.StartUrl = "local://dist/index.html";
+            config.StartUrl = "http://localhost:3000";
+            //config.StartUrl = "local://dist/index.html";
             config.UrlSchemes.Add(new UrlScheme("default-custom-http", "http", "backend", string.Empty, UrlSchemeType.LocalRequest, false));
             //Enable Kiosk Mode
             config.WindowOptions.KioskMode = false;
@@ -35,7 +39,7 @@ namespace CarHome.UI
             base.ConfigureServices(services);
             services.AddLogging(configure => configure.AddConsole());
             services.AddLogging(configure => configure.AddFile("Logs/serilog-{Date}.txt"));
-
+            services.AddScoped<IScreenService, ScreenService>();
             /*
             // Optional - adding custom handler
             services.AddSingleton<CefDragHandler, CustomDragHandler>();
@@ -54,13 +58,13 @@ namespace CarHome.UI
             services.AddSingleton<IChromelyConfiguration>(config);
             */
 
-            /* Optional
-            var options = new JsonSerializerOptions();
+           var options = new JsonSerializerOptions();
             options.ReadCommentHandling = JsonCommentHandling.Skip;
             options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.AllowTrailingCommas = true;
+            options.Converters.Add(new JsonStringEnumConverter());
             services.AddSingleton<JsonSerializerOptions>(options);
-            */
+
 
             RegisterControllerAssembly(services, typeof(UIApp).Assembly);
         }

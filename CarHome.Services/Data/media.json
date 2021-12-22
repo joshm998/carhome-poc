@@ -1,0 +1,36 @@
+{
+  "ScreenTitle": "Media",
+  "ScreenType": "ListView", 
+  "MenuItems": [
+    {
+      "Title": "Play",
+      "CommandType": "Play",
+      "Command": "",
+      "Icon": "circle-play"
+    },
+    {
+      "Title": "Pause",
+      "CommandType": "Pause",
+      "Command": "",
+      "Icon": "circle-play"
+    },
+    {
+      "Title": "Previous",
+      "CommandType": "Previous",
+      "Command": "",
+      "Icon": "circle-play"
+    },
+    {
+      "Title": "Next",
+      "CommandType": "Next",
+      "Command": "car",
+      "Icon": "circle-play"
+    },
+    {
+      "Title": "Back",
+      "CommandType": "Navigate",
+      "Command": "home",
+      "Icon": "circle-play"
+    }
+  ]
+}

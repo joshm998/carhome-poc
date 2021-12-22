@@ -13,6 +13,7 @@ using Chromely.Core.Network;
 using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
+using CarHome.Services;
 
 namespace CarHome.UI.Controllers
 {
@@ -24,45 +25,20 @@ namespace CarHome.UI.Controllers
     {
         private readonly IChromelyConfiguration _config;
         private readonly IChromelySerializerUtil _serializerUtil;
-        private readonly MediaPlayer _player;
-        private List<string> _musicList;
-        private int _currentSong;
+        private readonly IScreenService _screenService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MusicController"/> class.
         /// </summary>
-        public MusicController(IChromelyConfiguration config, IChromelySerializerUtil serializerUtil)
+        public MusicController(IChromelyConfiguration config, IChromelySerializerUtil serializerUtil, IScreenService screenService)
         {
             _config = config;
             _serializerUtil = serializerUtil;
-            _player = new MediaPlayer();
-            _currentSong = 0;
-            _musicList = new List<string>();
-            RegisterRequest("/music/load", LoadMusic);
-            RegisterRequest("/music/pause", PauseMusic);
-            RegisterRequest("/music/play", PlayMusic);
-            RegisterRequest("drives/list", GetDrives);
-
-            _player.MediaEnded += (s, e) =>
-            {
-                _player.Stop();
-                if (_currentSong < _musicList.Count - 1)
-                {
-                    _currentSong += 1;
-                    var loadMusicTask = Task.Run(() =>
-                    {
-                        return LoadMusic(_musicList[_currentSong]);
-                    });
-
-                    loadMusicTask.Wait();
-
-                    _player.Play();
-                }
-
-            };
+            _screenService = screenService;
+            RegisterRequest("/music", MusicControl);
         }
 
-    private IChromelyResponse LoadMusic(IChromelyRequest request)
+        private IChromelyResponse MusicControl(IChromelyRequest request)
         {
             if (request == null)
             {
@@ -75,100 +51,49 @@ namespace CarHome.UI.Controllers
             }
 
             var response = new ChromelyResponse(request.Id);
-            var path = request.Parameters["path"];
+            var commandType = request.Parameters["CommandType"];
+            var command = request.Parameters["Command"];
 
-            if (path != null)
+            if (commandType != null)
             {
-                _musicList = Directory
-                    .EnumerateFiles(path)
-                    .Where(file => file.ToLower().EndsWith("mp3") || file.ToLower().EndsWith("flac"))
-                    .ToList();
-
-                if (_musicList.Count > 0)
+                switch(commandType)
                 {
-                    _currentSong = 0;
+                    case "LoadMusic":
+                        var loadMusicTask = Task.Run(() =>
+                        {
+                            return _screenService.MusicPlayer.LoadMusic(command);
+                        });
+                        loadMusicTask.Wait();
+                        goto default;
 
-                    var loadMusicTask = Task.Run(() =>
-                    {
-                        return LoadMusic(_musicList[0]);
-                    });
+                    case "Play":
+                        _screenService.MusicPlayer.Play();
+                        goto default;
 
-                    loadMusicTask.Wait();
+                    case "Pause":
+                        _screenService.MusicPlayer.Pause();
+                        goto default;
 
-                    _player.Play();
+                    case "Previous":
+                        _screenService.MusicPlayer.PreviousTrack();
+                        goto default;
+
+                    case "Next":
+                        _screenService.MusicPlayer.NextTrack();
+                        goto default;
+
+                    default:
+                        var options = new JsonSerializerOptions();
+                        options.ReadCommentHandling = JsonCommentHandling.Skip;
+                        options.AllowTrailingCommas = true;
+                        response.Data = _serializerUtil.ObjectToJson(_screenService.GetScreenStatus());
+                        response.Status = 200;
+                        return response;
+
                 }
             }
-
-            var options = new JsonSerializerOptions();
-            options.ReadCommentHandling = JsonCommentHandling.Skip;
-            options.AllowTrailingCommas = true;
-            response.Data = _serializerUtil.ObjectToJson(_player);
-            response.Status = 200;
-
+            response.Status = 400;
             return response;
-        }
-
-        private IChromelyResponse PauseMusic(IChromelyRequest request)
-        {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            var response = new ChromelyResponse(request.Id);
-
-            _player.Pause();
-
-            var options = new JsonSerializerOptions();
-            options.ReadCommentHandling = JsonCommentHandling.Skip;
-            options.AllowTrailingCommas = true;
-            response.Data = _serializerUtil.ObjectToJson(_player);
-
-            return response;
-        }
-
-        private IChromelyResponse PlayMusic(IChromelyRequest request)
-        {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            var response = new ChromelyResponse(request.Id);
-
-            _player.Play();
-
-            var options = new JsonSerializerOptions();
-            options.ReadCommentHandling = JsonCommentHandling.Skip;
-            options.AllowTrailingCommas = true;
-            response.Data = _serializerUtil.ObjectToJson(_player);
-
-            return response;
-        }
-
-        private IChromelyResponse GetDrives(IChromelyRequest request)
-        {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            var response = new ChromelyResponse(request.Id);
-
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            var removableDrives = allDrives.Where(e => e.DriveType == DriveType.Removable);
-
-            var options = new JsonSerializerOptions();
-            options.ReadCommentHandling = JsonCommentHandling.Skip;
-            options.AllowTrailingCommas = true;
-            response.Data = _serializerUtil.ObjectToJson(removableDrives);
-
-            return response;
-        }
-
-        private async Task LoadMusic(string path)
-        {
-            await _player.LoadAsync(path);
         }
     }
 }

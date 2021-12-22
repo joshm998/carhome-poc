@@ -40,6 +40,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\CarHome.Services\CarHome.Services.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Update="Chromely.External.Controllers.dll">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
@@ -74,12 +78,12 @@
 
 		<Message Importance="High" Text="Copying React App to debug folder.." />
 		<Exec Condition="$([MSBuild]::IsOsPlatform('Linux'))" Command="cp &quot;$(ProjectDir)reactapp\build&quot; &quot;$(TargetDir)dist&quot; -r" />
-		<Exec Condition="$([MSBuild]::IsOsPlatform('Windows'))" Command="xcopy &quot;$(ProjectDir)reactapp\build&quot; &quot;$(TargetDir)dist&quot;   /i /s /r /y /c"  />
+		<Exec Condition="$([MSBuild]::IsOsPlatform('Windows'))" Command="xcopy &quot;$(ProjectDir)reactapp\build&quot; &quot;$(TargetDir)dist&quot;   /i /s /r /y /c" />
 
 		<Message Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" Importance="High" Text="Installing BASS Library on Windows" />
 		<MakeDir Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" Directories="$(ProjectDir)tmpbass" />
 		<Exec Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" Command="curl http://www.un4seen.com/files/bass24.zip --output $(ProjectDir)tmpbass\bass.zip" />
-		<Unzip Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" SourceFiles="$(ProjectDir)tmpbass\bass.zip" DestinationFolder="$(ProjectDir)\tmpbass" OverwriteReadOnlyFiles="true"/>
+		<Unzip Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" SourceFiles="$(ProjectDir)tmpbass\bass.zip" DestinationFolder="$(ProjectDir)\tmpbass" OverwriteReadOnlyFiles="true" />
 		<Copy Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" SourceFiles="$(ProjectDir)tmpbass\x64\bass.dll" DestinationFolder="$(TargetDir)" />
 		<RemoveDir Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" Directories="$(ProjectDir)tmpbass" />
 
