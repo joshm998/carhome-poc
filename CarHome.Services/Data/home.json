@@ -1,0 +1,41 @@
+{
+  "ScreenTitle": "Home",
+  "ScreenType": "HomeScreen", 
+  "MenuItems": [
+    {
+      "Title": "Android Auto",
+      "CommandType": "LaunchApp",
+      "Api": "screen",
+      "Command": "explorer.exe",
+      "Icon": "bi-play-circle-fill"
+    },
+    {
+      "Title": "Media",
+      "CommandType": "Navigate",
+      "Api": "screen",
+      "Command": "media",
+      "Icon": "bi-play-circle-fill"
+    },
+    {
+      "Title": "Bluetooth",
+      "CommandType": "Navigate",
+      "Api": "screen",
+      "Command": "bluetooth",
+      "Icon": "bi-play-circle-fill"
+    },
+    {
+      "Title": "Car",
+      "CommandType": "Navigate",
+      "Api": "screen",
+      "Command": "car",
+      "Icon": "bi-play-circle-fill"
+    },
+    {
+      "Title": "More",
+      "CommandType": "Navigate",
+      "Api": "screen",
+      "Command": "more",
+      "Icon": "bi-play-circle-fill"
+    }
+  ]
+}

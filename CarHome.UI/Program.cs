@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using CarHome.Services;
 using Chromely;
 using Chromely.Core;
 using Chromely.Core.Configuration;
@@ -6,7 +9,7 @@ using Chromely.Core.Network;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace ChromelyReact
+namespace CarHome.UI
 {
     class Program
     {
@@ -14,7 +17,8 @@ namespace ChromelyReact
         static void Main(string[] args)
         {
             var config = DefaultConfiguration.CreateForRuntimePlatform();
-            config.StartUrl = "local://dist/index.html";
+            config.StartUrl = "http://localhost:3000";
+            //config.StartUrl = "local://dist/index.html";
             config.UrlSchemes.Add(new UrlScheme("default-custom-http", "http", "backend", string.Empty, UrlSchemeType.LocalRequest, false));
             //Enable Kiosk Mode
             config.WindowOptions.KioskMode = false;
@@ -22,20 +26,20 @@ namespace ChromelyReact
             AppBuilder
             .Create()
             .UseConfig<DefaultConfiguration>(config)
-            .UseApp<DemoApp>()
+            .UseApp<CarHomeApp>()
             .Build()
             .Run(args);
         }
     }
 
-    public class DemoApp : ChromelyBasicApp
+    public class CarHomeApp : ChromelyBasicApp
     {
         public override void ConfigureServices(IServiceCollection services)
         {
             base.ConfigureServices(services);
             services.AddLogging(configure => configure.AddConsole());
-            services.AddLogging(configure => configure.AddFile("Logs/serilog-{Date}.txt"));
-
+            services.AddLogging(configure => configure.AddFile("Logs/log-{Date}.txt"));
+            services.AddScoped<IScreenService, ScreenService>();
             /*
             // Optional - adding custom handler
             services.AddSingleton<CefDragHandler, CustomDragHandler>();
@@ -54,15 +58,17 @@ namespace ChromelyReact
             services.AddSingleton<IChromelyConfiguration>(config);
             */
 
-            /* Optional
-            var options = new JsonSerializerOptions();
-            options.ReadCommentHandling = JsonCommentHandling.Skip;
-            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.AllowTrailingCommas = true;
+            var options = new JsonSerializerOptions
+            {
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                AllowTrailingCommas = true
+            };
+            options.Converters.Add(new JsonStringEnumConverter());
             services.AddSingleton<JsonSerializerOptions>(options);
-            */
 
-            RegisterControllerAssembly(services, typeof(DemoApp).Assembly);
+
+            RegisterControllerAssembly(services, typeof(CarHomeApp).Assembly);
         }
     }
 }

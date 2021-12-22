@@ -1,88 +1,103 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <PublishSingleFile>true</PublishSingleFile>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <!-- <RuntimeIdentifier>linux-x64</RuntimeIdentifier>-->
-    <!-- <RuntimeIdentifier>osx-x64</RuntimeIdentifier>-->
-    <Platforms>x64</Platforms>
-    <!-- <ApplicationIcon>chromely.ico</ApplicationIcon>-->
-    <AssemblyName>carhome_ui</AssemblyName>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ApplicationIcon />
-    <StartupObject />
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+		<PublishSingleFile>true</PublishSingleFile>
+		<RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">linux-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm' ">linux-arm</RuntimeIdentifier>
+		<RuntimeIdentifier Condition=" $([MSBuild]::IsOsPlatform('Windows')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' ">win-x64</RuntimeIdentifier>
+		<Platforms>x64</Platforms>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<!-- <ApplicationIcon>chromely.ico</ApplicationIcon>-->
+		<AssemblyName>carhome_ui</AssemblyName>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<ApplicationIcon />
+		<StartupObject />
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<PlatformTarget>x64</PlatformTarget>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Chromely" Version="5.1.88" />
-    <PackageReference Include="ManagedBass" Version="3.1.0" />
-    <PackageReference Include="ManagedBass.Flac" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-    <PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
-    <PackageReference Include="System.Text.Json" Version="6.0.1" />
-  </ItemGroup>
- 
-  <ItemGroup>
-    <Compile Remove="reactapp\node_modules\**" />
-    <EmbeddedResource Remove="reactapp\node_modules\**" />
-    <None Remove="reactapp\node_modules\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Chromely" Version="5.1.88" />
+		<PackageReference Include="ManagedBass" Version="3.1.0" />
+		<PackageReference Include="ManagedBass.Flac" Version="3.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+		<PackageReference Include="Serilog.Extensions.Logging.File" Version="2.0.0" />
+		<PackageReference Include="System.Text.Json" Version="6.0.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="Chromely.External.Controllers.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="chromely.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="reactapp\node_modules\**" />
+		<EmbeddedResource Remove="reactapp\node_modules\**" />
+		<None Remove="reactapp\node_modules\**" />
+	</ItemGroup>
 
-  <Target Name="DependsOn" DependsOnTargets="ValidateChromelyApp">
-    <Message Text="Target : DependsOn" />
-  </Target>
+	<ItemGroup>
+	  <ProjectReference Include="..\CarHome.Services\CarHome.Services.csproj" />
+	</ItemGroup>
 
-  <Target Name="ValidateChromelyApp" BeforeTargets="Build">
-    <Message Importance="High" Text="Checking if Node.js is installed.." />
-    <Exec Command="node --version" ContinueOnError="false">
-      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
-    </Exec>
-    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
-    <Message Condition="'$(ErrorCode)' == '0'" Importance="High" Text="Node.js is installed!" />
+	<ItemGroup>
+		<None Update="Chromely.External.Controllers.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="chromely.ico">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-    <Message Importance="High" Text="Checking if node_modules exists.." />
-    <Message Importance="High" Text="Running npm install, node_modules not found! (this could take a while)" Condition="!Exists('$(ProjectDir)reactapp\node_modules')" />
-    <Exec Command="npm install --silent" Condition="!Exists('$(ProjectDir)reactapp\node_modules')" WorkingDirectory="reactapp" ContinueOnError="false" />
-  </Target>
+	<Target Name="DependsOn" DependsOnTargets="ValidateChromelyApp">
+		<Message Text="Target : DependsOn" />
+	</Target>
 
-  <Target Name="DebugChromelyApp" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' ">
-    <Message Importance="High" Text="Building React App.." />
-    <Exec Command="npm run build" WorkingDirectory="reactapp" ContinueOnError="false" ConsoleToMSBuild="true">
-      <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
-    </Exec>
+	<Target Name="ValidateChromelyApp" BeforeTargets="Build">
+		<Message Importance="High" Text="Arch - $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)" />
+		<Message Importance="High" Text="Checking if Node.js is installed.." />
+		<Exec Command="node --version" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+		<Message Condition="'$(ErrorCode)' == '0'" Importance="High" Text="Node.js is installed!" />
 
-    <Message Importance="High" Text="Copying React App to debug folder.." />
-    <Exec Command="xcopy &quot;$(ProjectDir)reactapp\dist&quot; &quot;$(TargetDir)dist&quot;   /i /s /r /y /c" />
-  </Target>
+		<Message Importance="High" Text="Checking if node_modules exists.." />
+		<Message Importance="High" Text="Running npm install, node_modules not found! (this could take a while)" Condition="!Exists('$(ProjectDir)reactapp\node_modules')" />
+		<Exec Command="npm install --silent" Condition="!Exists('$(ProjectDir)reactapp\node_modules')" WorkingDirectory="reactapp" ContinueOnError="false" />
+	</Target>
 
-  <Target Name="ReleaseChromelyApp" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
-    <Exec Command="npm run build" WorkingDirectory="reactapp" ContinueOnError="true" ConsoleToMSBuild="false">
-      <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
-    </Exec>
-  </Target>
+	<Target Name="DebugChromelyApp" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' ">
+		<Message Importance="High" Text="Building React App.." />
+		<Exec Command="npm run build" WorkingDirectory="reactapp" ContinueOnError="false" ConsoleToMSBuild="true">
+			<Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+		</Exec>
 
-  <Target Name="FilterCopyLocalItems" AfterTargets="ResolveLockFileCopyLocalProjectDeps">
-    <ItemGroup>
-      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(Filename)' != 'Chromely.CefGlue' AND '%(Filename)' != 'Chromely.CefGlue.Winapi' AND '%(Filename)' != 'Chromely.Core'  AND '%(Filename)' != 'Microsoft.Extensions.Configuration'  AND '%(Filename)' != 'Microsoft.Extensions.Configuration.Binder'  AND '%(Filename)' != 'Microsoft.Extensions.Configuration.Json'  AND '%(Filename)' != 'Microsoft.Extensions.DependencyInjection'" />
-    </ItemGroup>
-  </Target>
+		<Message Importance="High" Text="Copying React App to debug folder.." />
+		<Exec Condition="$([MSBuild]::IsOsPlatform('Linux'))" Command="cp &quot;$(ProjectDir)reactapp\build&quot; &quot;$(TargetDir)dist&quot; -r" />
+		<Exec Condition="$([MSBuild]::IsOsPlatform('Windows'))" Command="xcopy &quot;$(ProjectDir)reactapp\build&quot; &quot;$(TargetDir)dist&quot;   /i /s /r /y /c" />
 
+		<Message Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" Importance="High" Text="Installing BASS Library on Windows" />
+		<MakeDir Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" Directories="$(ProjectDir)tmpbass" />
+		<Exec Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" Command="curl http://www.un4seen.com/files/bass24.zip --output $(ProjectDir)tmpbass\bass.zip" />
+		<Unzip Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" SourceFiles="$(ProjectDir)tmpbass\bass.zip" DestinationFolder="$(ProjectDir)\tmpbass" OverwriteReadOnlyFiles="true" />
+		<Copy Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" SourceFiles="$(ProjectDir)tmpbass\x64\bass.dll" DestinationFolder="$(TargetDir)" />
+		<RemoveDir Condition="$([MSBuild]::IsOsPlatform('Windows')) AND !Exists('$(TargetDir)bass.dll')" Directories="$(ProjectDir)tmpbass" />
+
+	</Target>
+
+	<Target Name="ReleaseChromelyApp" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Release' ">
+		<Exec Command="npm run build" WorkingDirectory="reactapp" ContinueOnError="true" ConsoleToMSBuild="false">
+			<Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+		</Exec>
+	</Target>
+
+	<Target Name="FilterCopyLocalItems" AfterTargets="ResolveLockFileCopyLocalProjectDeps">
+		<ItemGroup>
+			<ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)" Condition="'%(Filename)' != 'Chromely.CefGlue' AND '%(Filename)' != 'Chromely.CefGlue.Winapi' AND '%(Filename)' != 'Chromely.Core'  AND '%(Filename)' != 'Microsoft.Extensions.Configuration'  AND '%(Filename)' != 'Microsoft.Extensions.Configuration.Binder'  AND '%(Filename)' != 'Microsoft.Extensions.Configuration.Json'  AND '%(Filename)' != 'Microsoft.Extensions.DependencyInjection'" />
+		</ItemGroup>
+	</Target>
 </Project>
