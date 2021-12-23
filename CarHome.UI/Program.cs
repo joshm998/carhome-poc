@@ -17,8 +17,8 @@ namespace CarHome.UI
         static void Main(string[] args)
         {
             var config = DefaultConfiguration.CreateForRuntimePlatform();
-            config.StartUrl = "http://localhost:3000";
-            //config.StartUrl = "local://dist/index.html";
+            //config.StartUrl = "http://localhost:3000";
+            config.StartUrl = "local://dist/index.html";
             config.UrlSchemes.Add(new UrlScheme("default-custom-http", "http", "backend", string.Empty, UrlSchemeType.LocalRequest, false));
             //Enable Kiosk Mode
             config.WindowOptions.KioskMode = false;

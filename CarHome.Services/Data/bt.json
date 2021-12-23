@@ -1,0 +1,20 @@
+{
+  "ScreenTitle": "Bluetooth",
+  "ScreenType": "ListView", 
+  "MenuItems": [
+    {
+      "Title": "Next",
+      "CommandType": "Next",
+      "Api": "bt",
+      "Command": "",
+      "Icon": "circle-play"
+    },
+    {
+      "Title": "Back",
+      "CommandType": "Navigate",
+      "Api": "screen",
+      "Command": "home",
+      "Icon": "circle-play"
+    }
+  ]
+}
