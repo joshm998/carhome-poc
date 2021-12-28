@@ -37,7 +37,7 @@ function App() {
     console.log(command, commandType, api)
     let url = `http://backend/${api}/${commandType}`
     console.log(api)
-    if (api == "Music") 
+    if (api == "Music" || api == "bt") 
     {
       console.log("a")
       url = `http://backend/${api}`

@@ -25,7 +25,7 @@ namespace CarHome.UI.Controllers
             _config = config;
             _serializerUtil = serializerUtil;
             _screenService = screenService;
-            RegisterRequest("/bluetooth", MusicControl);
+            RegisterRequest("/bt", MusicControl);
         }
 
         private IChromelyResponse MusicControl(IChromelyRequest request)
@@ -51,7 +51,15 @@ namespace CarHome.UI.Controllers
                     case "Next":
                         _screenService.BluetoothService.NextTrack();
                         goto default;
-
+                    case "Previous":
+                        _screenService.BluetoothService.PreviousTrack();
+                        goto default;
+                    case "Play":
+                        _screenService.BluetoothService.Play();
+                        goto default;
+                    case "Pause":
+                        _screenService.BluetoothService.Pause();
+                        goto default;    
                     default:
                         response.Data = _serializerUtil.ObjectToJson(_screenService.GetScreenStatus());
                         response.Status = 200;
