@@ -20,7 +20,7 @@
       "Title": "Bluetooth",
       "CommandType": "Navigate",
       "Api": "screen",
-      "Command": "bluetooth",
+      "Command": "bt",
       "Icon": "bi-play-circle-fill"
     },
     {

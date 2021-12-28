@@ -14,11 +14,13 @@ namespace CarHome.Services
         private string _currentPath;
         private readonly FileBrowserService _fileBrowserService;
         public MusicPlayerService MusicPlayer { get; set; }
+        public BluetoothService BluetoothService { get; set; }
         public ScreenService()
         {
             _currentPath = "home";
             _fileBrowserService = new FileBrowserService();
             MusicPlayer = new MusicPlayerService();
+            BluetoothService = new BluetoothService();
         }
         
         public ScreenModel GetScreenStatus()
