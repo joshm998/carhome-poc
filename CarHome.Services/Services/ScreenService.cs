@@ -29,7 +29,7 @@ namespace CarHome.Services
             {
                 case "media":
                     if (MusicPlayer.MusicList.Count == 0)
-                        return new ScreenModel("Files", _fileBrowserService.GetDrives(), ScreenType.ListView);
+                        return new ScreenModel("Select Drive", _fileBrowserService.GetDrives(), ScreenType.ListView);
                     else
                         goto default;
 

@@ -8,21 +8,21 @@ function ListView(props) {
     const { data, handleAction } = props;
     return (
         <>
-            <h2 className='header'>Home</h2>
-            <Container>
-                <>
-                    <div className='row'>
-                        {data.menuItems.map((item, i) => (
-                            <Button text={item.title}
-                                icon={item.icon}
-                                onEnterPress={() => props.handleAction(item.command, item.commandType, item.api)}
-                                onClick={() => props.handleAction(item.command, item.commandType, item.api)}
+            <h2 className='header'>{data.screenTitle}</h2>
+            <div className="list-view">
+                <Container>
+                    <>
+                            {data.menuItems.map((item, i) => (
+                                <Button text={item.title}
+                                    icon={item.icon}
+                                    onEnterPress={() => props.handleAction(item.command, item.commandType, item.api)}
+                                    onClick={() => props.handleAction(item.command, item.commandType, item.api)}
 
-                            />
-                        ))}
-                    </div>
-                </>
-            </Container>
+                                />
+                            ))}
+                    </>
+                </Container>
+            </div>
         </>
     );
 }

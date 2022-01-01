@@ -10,7 +10,7 @@ const styles = {
 
 const Button = ({ text, focused, icon, onClick }) => {
     return (
-        <div className="item" onClick={onClick} style={focused ? styles.focused : {}}>
+        <div className={focused ? "item focused" : "item"} onClick={onClick}>
             <i className={`icon ${icon}`}></i>     
             <div className="text">{text}</div>
         </div>

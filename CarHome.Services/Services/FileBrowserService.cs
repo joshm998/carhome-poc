@@ -18,10 +18,12 @@ namespace CarHome.Services
         {
             var allDrives = DriveInfo.GetDrives();
             var removableDrives = allDrives.Where(e => e.DriveType == DriveType.Removable);
-            return removableDrives
+            var menuList = removableDrives
                 .Select( e => new MenuItem() 
                 { Command = e.RootDirectory.FullName, CommandType = CommandType.LoadMusic, Title = e.Name, Api = "Music"})
                 .ToList();
+            menuList.Add(new MenuItem(){ Command = "home", CommandType = CommandType.Navigate, Title = "Back", Api = "screen"});
+            return menuList;
         }
     }
 }

@@ -1,5 +1,23 @@
 @use 'styles/app-menu.scss';
+@use 'styles/list-view.scss';
+
+@font-face {
+  font-family: 'inter';
+  src: url("styles/fonts/inter.ttf") format("truetype");
+}
 
 .App {
   text-align: center;
+  font-family: inter;
+
+}
+body {
+  margin: 0px;
+  background-color: black;
+  color: white;
+}
+
+.focused {
+  background-color: rgb(96, 166, 189);
+  border-radius: 5%;
 }
