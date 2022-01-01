@@ -1,0 +1,21 @@
+.header {
+    margin: 0px;
+    display: flex;
+    height: 7vh;
+    font-size: 19px;
+    border-bottom: 2px white;
+    .title {
+        margin-left: 10px;
+        margin-top: auto;
+        margin-bottom: auto;
+        color: rgb(96, 166, 189);
+    }
+    .time {
+        flex-grow: 1;
+        text-align: right;
+        margin-right: 10px;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
+}
